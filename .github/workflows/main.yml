@@ -17,4 +17,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - uses: JoyJulianGomes/github-action-react-ci-ftp-cd@v0.11
+      - id: foo
+        uses: JoyJulianGomes/github-action-react-ci-ftp-cd@master
+      - run: echo ${{ steps.foo.outputs.VAR1 }} 
+        shell: bash
