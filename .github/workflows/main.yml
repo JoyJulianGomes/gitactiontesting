@@ -17,7 +17,9 @@ jobs:
       - name: modify package.json
         shell: bash
         run: |
-          node ./.github/workflows/homepageaddress.js
+          echo ${{ secrets.STAGING_SUDOKU_WEB_SUBDOMAIN }}
+          echo ${{ steps.get_tranch.outputs.TRANCH_NAME }}
+          node ./.github/workflows/homepageaddress.js ${{ secrets.STAGING_SUDOKU_WEB_SUBDOMAIN }} ${{ steps.get_tranch.outputs.TRANCH_NAME }}
       - name: build react app
         shell: bash
         run: |
