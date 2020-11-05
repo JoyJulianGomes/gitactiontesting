@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      version: ${{ steps.get_version.outputs.VERSION }}
+      TRANCH: ${{ steps.get_tranch.outputs.TRANCH_NAME }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -35,19 +35,10 @@ jobs:
       #       echo ${{ steps.get_folder_name.outputs.upload_folder }} 
       #   shell: bash
       - name: Get the version
-        id: get_version
-        run: |
-          version=$(echo ${GITHUB_REF////-} | cut --fields="3-" --delimiter='-')
-          echo $GITHUB_REF
-          echo $version
-          echo ::set-output name=VERSION::$version
+        id: get_tranch
+        uses: JoyJulianGomes/github-action-react-ci-ftp-cd/branchname@master
+      
+      - name: follow up
         shell: bash
-  job2:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    - run: |
-        v=$(echo ${GITHUB_REF////-} | cut --fields="3-" --delimiter='-')
-        echo $GITHUB_REF
-        echo $v
-        echo ${{needs.build.outputs.version}}
+        run: |
+          echo ${{ steps.get_tranch.outputs.TRANCH_NAME }}
