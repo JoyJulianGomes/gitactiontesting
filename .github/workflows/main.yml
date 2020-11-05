@@ -1,12 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
+name: FTPCICDforReact
 on: [ push, pull_request]
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,7 +14,20 @@ jobs:
         shell: bash
         run: |
           echo ${{ steps.get_tranch.outputs.TRANCH_NAME }}
-      - name: build react app
+      - name: modify package.json
         shell: bash
         run: |
           node ./.github/workflows/homepageaddress.js
+      - name: build react app
+        shell: bash
+        run: |
+          npm install
+          npm run build
+      - name: Upload ftp # don't use right away, echo the value first then...
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.STAGING_SUDOKU_WEB_SERVER }}
+          user: ${{ secrets.STAGING_SUDOKU_WEB_USERNAME }}
+          password: ${{ secrets.STAGING_SUDOKU_WEB_PASSWORD }}
+          localDir: "build/"
+          remoteDir: ${{ steps.get_tranch.outputs.TRANCH_NAME }}
