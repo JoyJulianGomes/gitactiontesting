@@ -25,7 +25,8 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: Upload ftp # don't use right away, echo the value first then...
+          cp package.json build/package.json
+      - name: upload build
         uses: sebastianpopp/ftp-action@releases/v2
         with:
           host: ${{ secrets.STAGING_SUDOKU_WEB_SERVER }}
