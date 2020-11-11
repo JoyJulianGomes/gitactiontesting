@@ -28,6 +28,7 @@ jobs:
       - name: build react app
         shell: bash
         run: |
+          mkdir build
           cp package.json build/package.json
       - name: upload build
         uses: sebastianpopp/ftp-action@releases/v2
