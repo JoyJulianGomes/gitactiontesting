@@ -1,5 +1,5 @@
 function beforeWrite() {
-	let pj = require("package.json");
+	let pj = require("../../package.json");
 	let subdomain_name = process.argv[2];
 	let folder_name = process.argv[3];
 	let fs = require("fs");
@@ -12,7 +12,7 @@ function beforeWrite() {
 }
 function afterWrite() {
 	console.log("added homepage to package.json");
-	pj_after = require("package.json");
+	pj_after = require("../../package.json");
 	console.log("after adding homepage:", pj_after.homepage);
 	console.log("package.json", pj_after);
 }
