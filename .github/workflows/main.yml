@@ -24,6 +24,8 @@ jobs:
       - name: modify package.json
         shell: bash
         run: |
+          pwd
+          ls
           node ./.github/workflows/homepageaddress.js ${{ env.subdomain }} ${{ steps.get_tranch.outputs.TRANCH_NAME }}
       - name: build react app
         shell: bash
