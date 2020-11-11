@@ -24,13 +24,12 @@ jobs:
       - name: modify package.json
         shell: bash
         run: |
-          pwd
-          ls
           node ./.github/workflows/homepageaddress.js ${{ env.subdomain }} ${{ steps.get_tranch.outputs.TRANCH_NAME }}
       - name: build react app
         shell: bash
         run: |
-          mkdir build
+          npm install
+          npm run build
           cp package.json build/package.json
       - name: upload build
         uses: sebastianpopp/ftp-action@releases/v2
