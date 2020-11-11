@@ -2,6 +2,8 @@ name: FTPCICDforReact
 on: [ push, pull_request]
 jobs:
   build:
+    env:
+      subdomain: ${{ secrets.STAGING_SUDOKU_WEB_SUBDOMAIN }}
     runs-on: ubuntu-latest
     outputs:
       TRANCH: ${{ steps.get_tranch.outputs.TRANCH_NAME }}
