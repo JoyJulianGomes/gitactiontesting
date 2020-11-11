@@ -2,10 +2,6 @@ name: FTPCICDforReact
 on: [ push, pull_request]
 jobs:
   build:
-    env:
-      subdomain: ${{ secrets.STAGING_SUDOKU_WEB_SUBDOMAIN }}
-      username: ${{ secrets.STAGING_SUDOKU_WEB_USERNAME }}
-      password: ${{ secrets.STAGING_SUDOKU_WEB_PASSWORD }}
     runs-on: ubuntu-latest
     outputs:
       TRANCH: ${{ steps.get_tranch.outputs.TRANCH_NAME }}
@@ -14,13 +10,6 @@ jobs:
       - name: Get branch/tag name for ftp folder
         id: get_tranch
         uses: JoyJulianGomes/github-action-react-ci-ftp-cd/branchname@master
-      - name: follow up
-        shell: bash
-        run: |
-          echo ${{ steps.get_tranch.outputs.TRANCH_NAME }}
-          echo ${{ env.subdomain }}
-          echo ${{ env.username }}
-          echo ${{ env.password }}
       - name: modify package.json
         shell: bash
         run: |
@@ -31,6 +20,21 @@ jobs:
           npm install
           npm run build
           cp package.json build/package.json
+  upload:
+    env:
+      subdomain: ${{ secrets.STAGING_SUDOKU_WEB_SUBDOMAIN }}
+      username: ${{ secrets.STAGING_SUDOKU_WEB_USERNAME }}
+      password: ${{ secrets.STAGING_SUDOKU_WEB_PASSWORD }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: follow up
+        shell: bash
+        run: |
+          echo ${{ needs.build.outputs.TRANCH }}
+          echo ${{ env.subdomain }}
+          echo ${{ env.username }}
+          echo ${{ env.password }}
       - name: upload build
         uses: sebastianpopp/ftp-action@releases/v2
         with:
@@ -38,4 +42,4 @@ jobs:
           user: ${{ env.username }}
           password: ${{ env.password }}
           localDir: "build/"
-          remoteDir: ${{ steps.get_tranch.outputs.TRANCH_NAME }}
+          remoteDir: ${{ needs.build.outputs.TRANCH }}
